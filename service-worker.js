@@ -1,4 +1,4 @@
-const CACHE_NAME = "education-quiz-cache-v9";
+const CACHE_NAME = "education-quiz-cache-v10";
 
 const CORE_FILES = [
   "./",
