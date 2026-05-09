@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教育クイズ</title>
+  <meta name="theme-color" content="#1976d2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="教育クイズ">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+  <h1>📘 教育クイズ</h1>
+
+  <p class="subtext">
+    学習するモードを選択してください
+  </p>
+
+  <!-- 音声学習モード入口 -->
+  <div class="top-menu-box">
+
+    <button class="card-btn voice-btn"
+      onclick="location.href='reader.html'">
+
+      🎧 音声学習モード
+
+    </button>
+
+  </div>
+
+  <hr style="margin: 20px 0;">
+
+  <p class="subtext">
+    クイズ学習モード
+  </p>
+
+  <div id="groupList"></div>
+
+</div>
+
+<script>
+  const list = document.getElementById("groupList");
+
+  fetch("./all_menus.json")
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`all_menus.json 読込失敗: ${res.status} ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      const menus = Array.isArray(data.menus) ? data.menus : [];
+
+      if (menus.length === 0) {
+        list.innerHTML = "<p>メニューがありません。</p>";
+        return;
+      }
+
+      menus.forEach(menu => {
+        const btn = document.createElement("button");
+        btn.className = "card-btn";
+        btn.textContent = `${menu.menu_name} (${menu.quiz_count}テーマ)`;
+        btn.onclick = () => {
+          location.href = "app.html?group=" + encodeURIComponent(menu.menu_name);
+        };
+        list.appendChild(btn);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      list.innerHTML = `<p>読込エラー: ${escapeHtml(err.message)}</p>`;
+    });
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js")
+        .then(() => console.log("Service Worker registered"))
+        .catch(err => console.error("Service Worker registration failed:", err));
+    });
+  }
+</script>
+
+<script>
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+</script>
+
+<!-- ここから別タグにする -->
+<script src="consent.js"></script>
+<script>
+  checkConsent();
+</script>
+
+</body>
+</html>
