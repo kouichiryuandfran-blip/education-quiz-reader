@@ -1,4 +1,4 @@
-const CACHE_NAME = "education-quiz-cache-v10";
+const CACHE_NAME = "education-quiz-cache-v12";
 
 const CORE_FILES = [
   "./",
@@ -8,6 +8,7 @@ const CORE_FILES = [
   "./reader.html",
   "./reader.js",
   "./reader.css",
+  "./speech_dictionary.js",
   "./style.css",
   "./manifest.json",
   "./all_menus.json",
